@@ -39,7 +39,7 @@ void Sleep::Execute(Student* student)
 	std::cout << "\n" << GetNameOfEntity(student->ID()) << ": " << "Zzzzzz";
 
 	if(student->GetSleepTime() >= 8){
-		student->ChangeState(Eat::Instance());
+		student->GetFSM()->ChangeState(Eat::Instance());
 	}
 	student->SleepMore(); // Increments entity's sleep counter by 2. 
 }
@@ -73,11 +73,11 @@ void Eat::Execute(Student* student)
 	std::cout << "\n" << GetNameOfEntity(student->ID()) << ": " << "Mmmm";
 
 	if(student->TimeForWork()){
-		student->ChangeState(Work::Instance());
+		student->GetFSM()->ChangeState(Work::Instance());
 	} else if (student->TimeForClass()){
-		student->ChangeState(AttendClass::Instance());
+		student->GetFSM()->ChangeState(AttendClass::Instance());
 	} else {
-		student->ChangeState(SpendFreeTime::Instance());
+		student->GetFSM()->ChangeState(SpendFreeTime::Instance());
 	}
 }
 
@@ -114,11 +114,11 @@ void SpendFreeTime::Execute(Student* student)
 	std::cout << "\n" << GetNameOfEntity(student->ID()) << ": " << "Reading my book...";
 
 	if(student->TimeForWork()){
-		student->ChangeState(Work::Instance());
+		student->GetFSM()->ChangeState(Work::Instance());
 	} else if(student->TimeForClass()){
-		student->ChangeState(AttendClass::Instance());
+		student->GetFSM()->ChangeState(AttendClass::Instance());
 	} else if(student->TimeForSleep()){
-		student->ChangeState(Sleep::Instance());
+		student->GetFSM()->ChangeState(Sleep::Instance());
 	}
 }
 
@@ -157,9 +157,9 @@ void AttendClass::Execute(Student* student)
 	std::cout << "\n" << GetNameOfEntity(student->ID()) << ": " << "Taking notes...";
 	if(student->ClassIsOver()){
 		if(student->TimeForWork()){
-			student->ChangeState(Work::Instance());
+			student->GetFSM()->ChangeState(Work::Instance());
 		} else {
-			student->ChangeState(SpendFreeTime::Instance());
+			student->GetFSM()->ChangeState(SpendFreeTime::Instance());
 		}
 	}
 }
@@ -199,11 +199,11 @@ void Work::Execute(Student* student)
 	student->IncHoursWorked();
 	if(student->GetHoursWorked() >= 8){
 		if(student->TimeForClass()){
-			student->ChangeState(AttendClass::Instance());
+			student->GetFSM()->ChangeState(AttendClass::Instance());
 		}else if(student->TimeForSleep()){
-			student->ChangeState(Sleep::Instance());
+			student->GetFSM()->ChangeState(Sleep::Instance());
 		} else { // The entity has free time
-			student->ChangeState(SpendFreeTime::Instance());
+			student->GetFSM()->ChangeState(SpendFreeTime::Instance());
 		}
 	}
 }

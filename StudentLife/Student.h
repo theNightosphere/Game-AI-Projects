@@ -7,12 +7,13 @@
 #include "State.h"
 #include "Locations.h"
 #include "WorldClock.h"
+#include "StateMachine.h"
 /**
  *	Name: Student.h
  *
  *	Author: Reed Johnson
  *
- *	Date Modified: 8.29.2012
+ *	Date Modified: 8.31.2012
  *
  *	Description: The prototype of the Student class, a child of the BaseGameEntity class. 
  *				 The Student class is the intelligent agent in this StudentLife project. 
@@ -24,6 +25,12 @@ class Student :
 private:
 	//Pointer to current state
 	State<Student>*	myCurrentState;
+
+	State<Student>* myGlobalState;
+
+	State<Student>* myPreviousState;
+
+	StateMachine<Student>* myStateMachine;
 
 	//Pointer to the world clock. Is used to check time, never change it.
 	WorldClock* myClockPtr;
@@ -40,9 +47,9 @@ private:
 public:
 	Student(int id, WorldClock* clock);
 
-	void Update();
+	~Student(){ delete myStateMachine; }
 
-	void ChangeState(State<Student>* newState);
+	void Update();
 
 	location_type Location() const{ return myLocation; }
 
@@ -68,6 +75,9 @@ public:
 
 	//Called by Work::
 	void resetHoursWorked() { myHoursWorked = 0; }
+
+	//Returns this entity's State Machine. 
+	StateMachine<Student>* GetFSM() const{ return myStateMachine; }
 
 };
 

@@ -1,5 +1,6 @@
 #include "Student.h"
 #include "StudentOwnedStates.h"
+#include "Locations.h"
 #include <cassert>
 /**
  *	Name: Student.cpp
@@ -13,37 +14,19 @@
 Student::Student(int id, WorldClock* clock) : BaseGameEntity(id),
 	myAmtOfSleep(2), //Clock starts at 0, so setting sleep at 2 assumes entity entered sleep at 10PM the previous day. 
 	myHoursWorked(0),
-	myCurrentState(Sleep::Instance())
+	myLocation(home)
 {
 	//Set the ptr to the world clock. This is never manipulated directly by Student, only polled.
 	myClockPtr = clock;
-}
 
+	myStateMachine = new StateMachine<Student>(this);
 
-
-
-
-void Student::ChangeState(State<Student>* newState)
-{
-	//Ensure both states are valid before attempting to call their methods
-	assert(myCurrentState && newState);
-
-	//Call the exit method of the current state
-	myCurrentState->Exit(this);
-
-	//Change state to new state
-	myCurrentState = newState;
-
-	//Call the enter method of the new state
-	myCurrentState->Enter(this);
+	myStateMachine->SetCurrentState(Sleep::Instance());
 }
 
 void Student::Update()
 {
-
-	if (myCurrentState){
-		myCurrentState->Execute(this);
-	}
+	myStateMachine->Update();
 }
 
 //Entity determines if it has class at the current time. Schedule:
