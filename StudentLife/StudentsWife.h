@@ -3,7 +3,7 @@
  *
  *	Author: Reed Johnson
  *
- *	Date: 8.31.2012
+ *	Date: 9.4.2012
  *
  *	Description: The prototype for the StudentsWife class, an intelligent agent that interacts with the Student.
  */

@@ -4,7 +4,7 @@
 /**
  *	Name: StudentsWifeOwnedStates.h
  *
- *	Date: 8.31.2012
+ *	Date: 9.4.2012
  *
  *	Author: Reed Johnson
  *
@@ -31,20 +31,20 @@ public:
 	virtual void Execute(StudentsWife* wife);
 
 	virtual void Exit(StudentsWife* wife){}
-}
+};
 
 //The entity sleeps until 8AM 
-class Sleep : public State<StudentsWife>
+class wSleep : public State<StudentsWife>
 {
 private:
-	Sleep(){}
+	wSleep(){}
 
-	Sleep(const Sleep&);
-	Sleep& operator=(const Sleep&);
+	wSleep(const wSleep&);
+	wSleep& operator=(const wSleep&);
 
 public:
 	//Class is a singleton
-	static Sleep* Instance();
+	static wSleep* Instance();
 
 	virtual void Enter(StudentsWife* wife);
 	
@@ -55,16 +55,16 @@ public:
 };
 
 //Entity eats food
-class Eat: public State<StudentsWife>
+class wEat: public State<StudentsWife>
 {
 private:
-	Eat(){}
+	wEat(){}
 
-	Eat(const Eat&);
-	Eat& operator=(const Sleep&);
+	wEat(const wEat&);
+	wEat& operator=(const wEat&);
 
 public:
-	static Eat* Instance();
+	static wEat* Instance();
 
 	virtual void Enter(StudentsWife* wife);
 
@@ -74,16 +74,16 @@ public:
 
 };
 
-class SpendFreeTime: public State<StudentsWife>
+class wSpendFreeTime: public State<StudentsWife>
 {
 private:
-	SpendFreeTime(){}
+	wSpendFreeTime(){}
 
-	SpendFreeTime(const SpendFreeTime&);
-	SpendFreeTime& operator=(const SpendFreeTime&);
+	wSpendFreeTime(const wSpendFreeTime&);
+	wSpendFreeTime& operator=(const wSpendFreeTime&);
 	
 public:
-	static SpendFreeTime* Instance();
+	static wSpendFreeTime* Instance();
 
 	virtual void Enter(StudentsWife* wife);
 
@@ -94,16 +94,16 @@ public:
 };
 
 //The entity works at a job. 
-class Work : public State<StudentsWife>
+class wWork : public State<StudentsWife>
 {
 private:
-	Work(){}
+	wWork(){}
 
-	Work(const Work&);
-	Work& operator=(const Work&);
+	wWork(const wWork&);
+	wWork& operator=(const wWork&);
 
 public:
-	static Work* Instance();
+	static wWork* Instance();
 
 	virtual void Enter(StudentsWife* wife);
 
@@ -112,21 +112,21 @@ public:
 	virtual void Exit(StudentsWife* wife);
 };
 
-class WaterPlants : public State<StudentsWife>
+class wWaterPlants : public State<StudentsWife>
 {
 private:
-	WaterPLants(){}
+	wWaterPlants(){}
 
-	WaterPlants(const WaterPlants&);
-	WaterPlants& operator=(const WaterPlants&);
+	wWaterPlants(const wWaterPlants&);
+	wWaterPlants& operator=(const wWaterPlants&);
 public:
-	static WaterPLants& Instance();
+	static wWaterPlants* Instance();
 
 	virtual void Enter(StudentsWife* wife);
 
 	virtual void Execute(StudentsWife* wife);
 
 	virtual void Exit(StudentsWife* wife);
-}
+};
 
 #endif
