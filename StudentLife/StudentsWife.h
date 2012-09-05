@@ -15,6 +15,7 @@
 #include "State.h"
 #include "StateMachine.h"
 #include "Locations.h"
+#include <iostream>
 
 
 class StudentsWife : public BaseGameEntity
