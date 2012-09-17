@@ -3,14 +3,19 @@
 #include "EntityNames.h"
 #include "Locations.h"
 #include "StudentsWife.h"
+#include "MessageTypes.h"
+#include "MessageDispatcher.h"
 #include <iostream>
+#include <ctime>
 #include <string>
+
+using std::cout;
 /**
  *	Name: StudentsWifeOwnedStates.cpp
  *
  *	Author: Reed Johnson
  *
- *	Date Modified: 9.4.2012
+ *	Date Modified: 9.16.2012
  *
  *	Description: Implements the definitions of all the various actions associated with the StudentsWifeOwnedStates.
  */
@@ -21,6 +26,13 @@ WifesGlobalState* WifesGlobalState::Instance()
 
 	return &instance;
 }
+//Determines how the wife Handles message in her global state. She doesn't. 
+bool WifesGlobalState::OnMessage(StudentsWife* wife, const Telegram& msg)
+{
+	
+	return false;
+}
+
 
 //The entity randomly waters the plants. 1/10 chance. Will not water plants while at work or sleeping. 
 void WifesGlobalState::Execute(StudentsWife* wife)
@@ -70,6 +82,11 @@ void wSleep::Exit(StudentsWife* wife)
 	wife->resetSleep();
 }
 
+bool wSleep::OnMessage(StudentsWife* wife, const Telegram& msg)
+{
+	return false;
+}
+
 wEat* wEat::Instance()
 {
 	static wEat instance;
@@ -100,6 +117,11 @@ void wEat::Execute(StudentsWife* wife)
 void wEat::Exit(StudentsWife* wife)
 {
 	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "That was good food!";
+}
+
+bool wEat::OnMessage(StudentsWife* wife, const Telegram& msg)
+{
+	return false;
 }
 
 wSpendFreeTime* wSpendFreeTime::Instance()
@@ -140,6 +162,30 @@ void wSpendFreeTime::Exit(StudentsWife* wife)
 	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "Well, that was fun!";
 }
 
+//If the entity is at home spending free time, she handles message by deciding to watch tv. 
+bool wSpendFreeTime::OnMessage(StudentsWife* wife, const Telegram& msg)
+{
+	switch(msg.Msg)
+	{
+	case Msg_LetsWatchTV:
+		{
+			time_t currentTime = time(NULL);
+			struct tm * displayTime = localtime( &currentTime);
+			cout << "\nMessage handled by " << GetNameOfEntity(wife->ID())
+				 << " at time: " << asctime(displayTime);
+			cout << "\n" << GetNameOfEntity(wife->ID()) <<
+				": Hey! Lets watch some TV!";
+
+			wife->GetFSM()->ChangeState(wWatchTV::Instance());
+		}
+
+		return true;
+
+	}
+
+	return false;
+}
+
 wWork* wWork::Instance()
 {
 	static wWork instance;
@@ -177,6 +223,11 @@ void wWork::Exit(StudentsWife* wife)
 	wife->resetHoursWorked();
 }
 
+bool wWork::OnMessage(StudentsWife* wife, const Telegram& msg)
+{
+	return false;
+}
+
 wWaterPlants* wWaterPlants::Instance()
 {
 	static wWaterPlants instance;
@@ -206,4 +257,66 @@ void wWaterPlants::Execute(StudentsWife* wife)
 void wWaterPlants::Exit(StudentsWife* wife)
 {
 	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "The plants are looking healthy!";
+}
+
+bool wWaterPlants::OnMessage(StudentsWife* wife, const Telegram& msg)
+{
+	return false;
+}
+
+wWatchTV* wWatchTV::Instance()
+{
+	static wWatchTV instance;
+
+	return &instance;
+}
+
+void wWatchTV::Enter(StudentsWife* wife)
+{
+	//if not already watching TV, start watching
+	if(!wife->WatchingTV())
+	{
+		cout << "\n" << GetNameOfEntity(wife->ID())
+			 << ": Turning on the TV!";
+
+		//send a delayed message to myself so that I know when to stop watching TV
+		Dispatch->DispatchMessage(1.5,		//Time delay
+								  wife->ID(), //sender ID
+								  wife->ID(), //receiver ID
+								  Msg_DoneWithTV, //The message
+								  0);	//No additional info
+
+		wife->setWatchingTV(true);
+	}
+}
+
+void wWatchTV::Exit(StudentsWife* wife)
+{
+	cout << "\nBetter get back to something else!";
+}
+
+bool wWatchTV::OnMessage(StudentsWife* wife, const Telegram& msg)
+{
+	switch(msg.Msg)
+	{
+	case Msg_DoneWithTV:
+		{
+		time_t currentTime = time(NULL);
+		struct tm * displayTime = localtime( &currentTime );
+		cout << "\nMessage received by " << GetNameOfEntity(wife->ID()) <<
+			" at time: " << asctime(displayTime);
+		cout << "\n" << GetNameOfEntity(wife->ID()) << ": That was fun!";
+
+		//Tell husband we're done watching TV
+		Dispatch->DispatchMessage(0, wife->ID(),
+								  ent_Reed,
+								  Msg_DoneWithTV,
+								  0);
+
+		wife->setWatchingTV(false);
+
+		wife->GetFSM()->ChangeState(wSpendFreeTime::Instance());
+		}
+	}
+	return false;
 }

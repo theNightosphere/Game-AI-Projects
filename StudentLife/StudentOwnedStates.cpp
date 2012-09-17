@@ -3,16 +3,21 @@
 #include "State.h"
 #include "EntityNames.h"
 #include "Locations.h"
+#include "MessageDispatcher.h"
+#include "MessageTypes.h"
+#include "EntityManager.h"
 #include <iostream>
+#include <ctime>
 /**
  *	Name: StudentOwnedStates.cpp
  *
  *	Author: Reed Johnson
  *
- *	Date Modified: 8.31.2012
+ *	Date Modified: 9.16.2012
  *
  *	Description: Implements the definitions of all the various actions associated with the StudentOwnedStates.
  */
+using std::cout;
 
 //Returns the instance of the Sleep state
 Sleep* Sleep::Instance()
@@ -52,6 +57,11 @@ void Sleep::Exit(Student* student)
 	student->resetSleep();
 }
 
+bool Sleep::OnMessage(Student* student, const Telegram&)
+{
+	return false;
+}
+
 //Returns an instance of the Eat state
 Eat* Eat::Instance()
 {
@@ -87,6 +97,11 @@ void Eat::Exit(Student* student)
 	std::cout << "\n" << GetNameOfEntity(student->ID()) << ": " << "That was good food!";
 }
 
+bool Eat::OnMessage(Student* student, const Telegram&)
+{
+	return false;
+}
+
 //Return an instance of the SpendFreeTime state
 SpendFreeTime* SpendFreeTime::Instance()
 {
@@ -104,6 +119,13 @@ void SpendFreeTime::Enter(Student* student)
 		student->ChangeLocation(home);
 	}
 	std::cout << "\n" << GetNameOfEntity(student->ID()) << ": " << "I can't wait to read this book.";
+
+	//See if wife wants to watch TV.
+	Dispatch->DispatchMessage(0,	//time delay
+							  student->ID(),	//Sender ID
+							  ent_Amanda,		//Receiver ID
+							  Msg_LetsWatchTV,	//Message
+							  NULL);			//No additional info
 
 }
 
@@ -126,6 +148,27 @@ void SpendFreeTime::Execute(Student* student)
 void SpendFreeTime::Exit(Student* student)
 {
 	std::cout << "\n" << GetNameOfEntity(student->ID()) << ": " << "Well, that was fun!";
+}
+
+bool SpendFreeTime::OnMessage(Student* student, const Telegram& msg)
+{
+	time_t currentTime = time(NULL);
+	struct tm * displayTime = localtime(&currentTime);
+	switch(msg.Msg)
+	{
+	case Msg_DoneWithTV:
+		
+		cout << "\nMessage handled by " << GetNameOfEntity(student->ID())
+			<< " at time: " << asctime(displayTime);
+
+		cout << "\n" << GetNameOfEntity(student->ID()) <<
+			": Alright, I'll watch something now!";
+
+		student->GetFSM()->ChangeState(WatchTV::Instance());
+
+		return true;
+	}
+	return false;
 }
 
 //Returns the instance of the AttendClass state
@@ -170,6 +213,11 @@ void AttendClass::Exit(Student* student)
 	std::cout << "\n" << GetNameOfEntity(student->ID()) << ": " << "Glad classes are over!";
 }
 
+bool AttendClass::OnMessage(Student* student, const Telegram&)
+{
+	return false;
+}
+
 //Returns the instance of the Work state.
 Work* Work::Instance()
 {
@@ -202,7 +250,7 @@ void Work::Execute(Student* student)
 			student->GetFSM()->ChangeState(AttendClass::Instance());
 		}else if(student->TimeForSleep()){
 			student->GetFSM()->ChangeState(Sleep::Instance());
-		} else { // The entity has free time
+		} else { 
 			student->GetFSM()->ChangeState(SpendFreeTime::Instance());
 		}
 	}
@@ -214,4 +262,44 @@ void Work::Exit(Student* student)
 {
 	std::cout << "\n" << GetNameOfEntity(student->ID()) << ": " << "Glad work is over!";
 	student->resetHoursWorked();
+}
+
+bool Work::OnMessage(Student* student, const Telegram&)
+{
+	return false;
+}
+
+//Returns the instance of the AttendClass state
+WatchTV* WatchTV::Instance()
+{
+	static WatchTV instance;
+
+	return &instance;
+}
+
+//The entity enters the watch TV state. 
+void WatchTV::Enter(Student* student)
+{
+
+	std::cout << "\n" << GetNameOfEntity(student->ID()) << ": " << "I'll watch this show!";
+
+}
+
+//Entity watches TV for one cycle and returns to SpendFreeTime
+void WatchTV::Execute(Student* student)
+{
+	std::cout << "\n" << GetNameOfEntity(student->ID()) << ": " << "I love this show...";
+	
+	student->GetFSM()->ChangeState(SpendFreeTime::Instance());
+}
+
+//The entity announces how it enjoyed the TV show as it exits the state. 
+void WatchTV::Exit(Student* student)
+{
+	std::cout << "\n" << GetNameOfEntity(student->ID()) << ": " << "That was fun!";
+}
+
+bool WatchTV::OnMessage(Student* student, const Telegram&)
+{
+	return false;
 }

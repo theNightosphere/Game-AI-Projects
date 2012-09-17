@@ -4,7 +4,7 @@
 /**
  *	Name: StudentsWifeOwnedStates.h
  *
- *	Date: 9.4.2012
+ *	Date: 9.16.2012
  *
  *	Author: Reed Johnson
  *
@@ -12,6 +12,7 @@
  */
 
 #include "State.h"
+#include "MessageDispatcher.h"
 
 class StudentsWife;
 
@@ -25,12 +26,14 @@ private:
 public:
 	//this class is a singleton
 	static WifesGlobalState* Instance();
+	virtual bool OnMessage(StudentsWife* wife, const Telegram& msg);
 
 	virtual void Enter(StudentsWife* wife){}
 
 	virtual void Execute(StudentsWife* wife);
 
 	virtual void Exit(StudentsWife* wife){}
+
 };
 
 //The entity sleeps until 8AM 
@@ -52,6 +55,8 @@ public:
 
 	virtual void Exit(StudentsWife* wife);
 
+	virtual bool OnMessage(StudentsWife* wife, const Telegram& msg);
+
 };
 
 //Entity eats food
@@ -72,6 +77,7 @@ public:
 
 	virtual void Exit(StudentsWife* wife);
 
+	virtual bool OnMessage(StudentsWife* wife, const Telegram& msg);
 };
 
 class wSpendFreeTime: public State<StudentsWife>
@@ -91,6 +97,7 @@ public:
 
 	virtual void Exit(StudentsWife* wife);
 
+	virtual bool OnMessage(StudentsWife* wife, const Telegram& msg);
 };
 
 //The entity works at a job. 
@@ -110,6 +117,8 @@ public:
 	virtual void Execute(StudentsWife* wife);
 
 	virtual void Exit(StudentsWife* wife);
+
+	virtual bool OnMessage(StudentsWife* wife, const Telegram& msg);
 };
 
 class wWaterPlants : public State<StudentsWife>
@@ -127,6 +136,27 @@ public:
 	virtual void Execute(StudentsWife* wife);
 
 	virtual void Exit(StudentsWife* wife);
+
+	virtual bool OnMessage(StudentsWife* wife, const Telegram& msg);
+};
+
+class wWatchTV : public State<StudentsWife>
+{
+private:
+	wWatchTV(){}
+
+	wWatchTV(const wWatchTV&);
+	wWatchTV& operator=(const wWatchTV&);
+public:
+	static wWatchTV* Instance();
+
+	virtual void Enter(StudentsWife* wife);
+
+	virtual void Execute(StudentsWife* wife){}
+
+	virtual void Exit(StudentsWife* wife);
+
+	virtual bool OnMessage(StudentsWife* wife, const Telegram& msg);
 };
 
 #endif

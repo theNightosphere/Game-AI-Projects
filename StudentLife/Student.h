@@ -8,6 +8,7 @@
 #include "Locations.h"
 #include "WorldClock.h"
 #include "StateMachine.h"
+#include "MessageDispatcher.h"
 /**
  *	Name: Student.h
  *
@@ -78,6 +79,8 @@ public:
 
 	//Returns this entity's State Machine. 
 	StateMachine<Student>* GetFSM() const{ return myStateMachine; }
+
+	bool HandleMessage(const Telegram& msg);
 
 };
 

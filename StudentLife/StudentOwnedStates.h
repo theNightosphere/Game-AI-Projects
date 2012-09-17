@@ -34,6 +34,7 @@ public:
 
 	virtual void Exit(Student* student);
 
+	virtual bool OnMessage(Student* student, const Telegram&);
 };
 
 //Entity eats food
@@ -54,6 +55,7 @@ public:
 
 	virtual void Exit(Student* student);
 
+	virtual bool OnMessage(Student* student, const Telegram&);
 };
 
 //The entity enjoys its free time by reading a book. 
@@ -74,6 +76,7 @@ public:
 
 	virtual void Exit(Student* student);
 
+	virtual bool OnMessage(Student* student, const Telegram&);
 };
 
 //The entity attends class. 
@@ -93,6 +96,8 @@ public:
 	virtual void Execute(Student* student);
 
 	virtual void Exit(Student* student);
+
+	virtual bool OnMessage(Student* student, const Telegram&);
 };
 
 //The entity works at a job. 
@@ -112,6 +117,28 @@ public:
 	virtual void Execute(Student* student);
 
 	virtual void Exit(Student* student);
+
+	virtual bool OnMessage(Student* student, const Telegram&);
+};
+
+class WatchTV : public State<Student>
+{
+private:
+	WatchTV(){}
+
+	WatchTV(const WatchTV&);
+	WatchTV& operator=(const WatchTV&);
+
+public:
+	static WatchTV* Instance();
+
+	virtual void Enter(Student* student);
+
+	virtual void Execute(Student* student);
+
+	virtual void Exit(Student* student);
+
+	virtual bool OnMessage(Student* student, const Telegram&);
 };
 
 #endif

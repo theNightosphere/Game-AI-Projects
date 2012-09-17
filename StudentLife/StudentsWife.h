@@ -3,7 +3,7 @@
  *
  *	Author: Reed Johnson
  *
- *	Date: 9.4.2012
+ *	Date: 9.16.2012
  *
  *	Description: The prototype for the StudentsWife class, an intelligent agent that interacts with the Student.
  */
@@ -15,6 +15,7 @@
 #include "State.h"
 #include "StateMachine.h"
 #include "Locations.h"
+#include "MessageDispatcher.h"
 
 
 class StudentsWife : public BaseGameEntity
@@ -39,6 +40,8 @@ private:
 
 	//Integer representing number of hours entity has been working
 	int myHoursWorked;
+
+	bool isWatchingTV;
 public:
 	StudentsWife(int id, WorldClock* clock);
 	~StudentsWife(){ delete myStateMachine; }
@@ -67,7 +70,10 @@ public:
 
 	bool TimeForWork();
 	bool TimeForSleep();
+	bool HandleMessage(const Telegram& msg);
+	bool WatchingTV() const{ return isWatchingTV; }
 
+	void setWatchingTV(bool watchingOrNot){ isWatchingTV = watchingOrNot; }
 	StateMachine<StudentsWife>* GetFSM() const{ return myStateMachine; }
 };
 

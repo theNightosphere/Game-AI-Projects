@@ -64,3 +64,8 @@ void StudentsWife::Update()
 {
 	myStateMachine->Update();
 }
+
+bool StudentsWife::HandleMessage(const Telegram& msg)
+{
+	return myStateMachine->HandleMessage(msg);
+}

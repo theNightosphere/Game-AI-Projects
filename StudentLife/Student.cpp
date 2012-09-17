@@ -131,3 +131,8 @@ bool Student::TimeForSleep()
 	return (time >= 20) ? true : false;
 
 }
+
+bool Student::HandleMessage(const Telegram& msg)
+{
+	return myStateMachine->HandleMessage(msg);
+}
