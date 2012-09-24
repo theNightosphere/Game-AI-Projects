@@ -33,7 +33,10 @@ public:
 	virtual void Execute(StudentsWife* wife);
 
 	virtual void Exit(StudentsWife* wife){}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 5b25a19e9fc4ea4677fc543e5700084e73fe6282
 };
 
 //The entity sleeps until 8AM 
@@ -136,6 +139,7 @@ public:
 	virtual void Execute(StudentsWife* wife);
 
 	virtual void Exit(StudentsWife* wife);
+<<<<<<< HEAD
 
 	virtual bool OnMessage(StudentsWife* wife, const Telegram& msg);
 };
@@ -157,6 +161,8 @@ public:
 	virtual void Exit(StudentsWife* wife);
 
 	virtual bool OnMessage(StudentsWife* wife, const Telegram& msg);
+=======
+>>>>>>> 5b25a19e9fc4ea4677fc543e5700084e73fe6282
 };
 
 #endif

@@ -15,7 +15,11 @@
 #include "State.h"
 #include "StateMachine.h"
 #include "Locations.h"
+<<<<<<< HEAD
 #include "MessageDispatcher.h"
+=======
+#include <iostream>
+>>>>>>> 5b25a19e9fc4ea4677fc543e5700084e73fe6282
 
 
 class StudentsWife : public BaseGameEntity
