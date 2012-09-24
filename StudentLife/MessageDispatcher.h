@@ -27,12 +27,12 @@ struct Telegram
 
 	//Messages can be dispatched immediately or delayed for a specified amount of time.
 	//If a delay is necessary, this field is stamped with the time the message should be dispatched.
-	double dispatchTime;
+	int dispatchTime;
 
 	//any additional info that may accompany the message
 	void* extraInfo;
 
-	Telegram(double pDelay, int pSender, int pReceiver, int pMsg, void* pExtraInfo)
+	Telegram(int pDelay, int pSender, int pReceiver, int pMsg, void* pExtraInfo)
 	{
 		dispatchTime = pDelay;
 		sender = pSender;
@@ -70,7 +70,7 @@ public:
 	static MessageDispatcher* Instance();
 
 	//send a message to another agent.
-	void DispatchMessage(double delay, int sender, int receiver, int msg, void* ExtraInfo);
+	void DispatchMessage(int delay, int sender, int receiver, int msg, void* ExtraInfo);
 
 	//send out any delayed messages. This method is called each time through the main game loop.
 	void DispatchDelayedMessages();

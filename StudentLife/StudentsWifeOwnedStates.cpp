@@ -15,7 +15,7 @@ using std::cout;
  *
  *	Author: Reed Johnson
  *
- *	Date Modified: 9.16.2012
+ *	Date Modified: 9.24.2012
  *
  *	Description: Implements the definitions of all the various actions associated with the StudentsWifeOwnedStates.
  */
@@ -159,7 +159,7 @@ void wSpendFreeTime::Execute(StudentsWife* wife)
 //The entity exits the state SpendFreeTime and announces how enjoyable it was.
 void wSpendFreeTime::Exit(StudentsWife* wife)
 {
-	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "Well, that was fun!";
+	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "Done reading my book!";
 }
 
 //If the entity is at home spending free time, she handles message by deciding to watch tv. 
@@ -174,7 +174,7 @@ bool wSpendFreeTime::OnMessage(StudentsWife* wife, const Telegram& msg)
 			cout << "\nMessage handled by " << GetNameOfEntity(wife->ID())
 				 << " at time: " << asctime(displayTime);
 			cout << "\n" << GetNameOfEntity(wife->ID()) <<
-				": Hey! Lets watch some TV!";
+				": I'm going to watch some TV...";
 
 			wife->GetFSM()->ChangeState(wWatchTV::Instance());
 		}
@@ -280,7 +280,7 @@ void wWatchTV::Enter(StudentsWife* wife)
 			 << ": Turning on the TV!";
 
 		//send a delayed message to myself so that I know when to stop watching TV
-		Dispatch->DispatchMessage(1.5,		//Time delay
+		Dispatch->DispatchMessage(1,		//Time delay
 								  wife->ID(), //sender ID
 								  wife->ID(), //receiver ID
 								  Msg_DoneWithTV, //The message

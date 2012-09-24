@@ -42,7 +42,7 @@ void MessageDispatcher::Discharge(BaseGameEntity* pReceiver, const Telegram& msg
 //  routes the message to the correct agent (if no delay) or stores
 //  in the message queue to be dispatched at the correct time
 //------------------------------------------------------------------------
-void MessageDispatcher::DispatchMessage(double  delay,
+void MessageDispatcher::DispatchMessage(int  delay,
                                         int    sender,
                                         int    receiver,
                                         int    msg,
@@ -64,7 +64,7 @@ void MessageDispatcher::DispatchMessage(double  delay,
   Telegram telegram(0, sender, receiver, msg, ExtraInfo);
   
   //if there is no delay, route telegram immediately                       
-  if (delay <= 0.0f)                                                        
+  if (delay <= 0)                                                        
   {
     cout << "\nInstant telegram dispatched by " << GetNameOfEntity(pSender->ID()) << " for " << GetNameOfEntity(pReceiver->ID()) 
          << ". Msg is "<< MsgToStr(msg);

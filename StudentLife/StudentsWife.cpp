@@ -13,7 +13,8 @@
 StudentsWife::StudentsWife(int id, WorldClock* clock) : BaseGameEntity(id),
 	myAmtOfSleep(2),
 	myLocation(home),
-	myHoursWorked(0)
+	myHoursWorked(0),
+	isWatchingTV(false)
 {
 	//Gives the StudentsWife entity a pointer to the global clock
 	myClockPtr = clock;
@@ -57,7 +58,7 @@ bool StudentsWife::TimeForSleep()
 {
 	int time = myClockPtr->getTime();
 	
-	return (time >= 22) ? true : false;
+	return ((time >= 22) || (time <= 6)) ? true : false;
 }
 
 void StudentsWife::Update()
