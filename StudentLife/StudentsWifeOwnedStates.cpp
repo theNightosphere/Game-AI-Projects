@@ -82,14 +82,12 @@ void wSleep::Exit(StudentsWife* wife)
 	wife->resetSleep();
 }
 
-<<<<<<< HEAD
+
 bool wSleep::OnMessage(StudentsWife* wife, const Telegram& msg)
 {
 	return false;
 }
 
-=======
->>>>>>> 5b25a19e9fc4ea4677fc543e5700084e73fe6282
 wEat* wEat::Instance()
 {
 	static wEat instance;
@@ -122,18 +120,15 @@ void wEat::Exit(StudentsWife* wife)
 	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "That was good food!";
 }
 
-<<<<<<< HEAD
+
 bool wEat::OnMessage(StudentsWife* wife, const Telegram& msg)
 {
 	return false;
 }
 
+
 wSpendFreeTime* wSpendFreeTime::Instance()
 {
-=======
-wSpendFreeTime* wSpendFreeTime::Instance()
-{
->>>>>>> 5b25a19e9fc4ea4677fc543e5700084e73fe6282
 	static wSpendFreeTime instance;
 
 	return &instance;
@@ -166,7 +161,6 @@ void wSpendFreeTime::Execute(StudentsWife* wife)
 
 //The entity exits the state SpendFreeTime and announces how enjoyable it was.
 void wSpendFreeTime::Exit(StudentsWife* wife)
-<<<<<<< HEAD
 {
 	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "Done reading my book!";
 }
@@ -233,13 +227,10 @@ void wWork::Exit(StudentsWife* wife)
 }
 
 bool wWork::OnMessage(StudentsWife* wife, const Telegram& msg)
-=======
->>>>>>> 5b25a19e9fc4ea4677fc543e5700084e73fe6282
 {
 	return false;
 }
 
-<<<<<<< HEAD
 wWaterPlants* wWaterPlants::Instance()
 {
 	static wWaterPlants instance;
@@ -331,72 +322,4 @@ bool wWatchTV::OnMessage(StudentsWife* wife, const Telegram& msg)
 		}
 	}
 	return false;
-=======
-wWork* wWork::Instance()
-{
-	static wWork instance;
-
-	return &instance;
-}
-
-//Entity enters the wWork state. 
-void wWork::Enter(StudentsWife* wife)
-{
-	if(wife->Location() != work){
-		std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "Heading to work!";
-
-		wife->ChangeLocation(work);
-	}
-	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "Time to start working.";
-
-}
-
-//The entity Works for 8 hours. Amount of hours worked is incremented by 2 each time Execute is called
-void wWork::Execute(StudentsWife* wife)
-{
-	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "Working...";
-	wife->IncHoursWorked();
-	if(wife->GetHoursWorked() >= 8){
-		wife->GetFSM()->ChangeState(wSpendFreeTime::Instance());
-	}
-	
-}
-
-//The entity exits the state Work and announces how they're glad it is over.
-void wWork::Exit(StudentsWife* wife)
-{
-	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "I'm glad work is over!";
-	wife->resetHoursWorked();
-}
-
-wWaterPlants* wWaterPlants::Instance()
-{
-	static wWaterPlants instance;
-
-	return &instance;
-
-}
-
-//Entity enters the Work state. 
-void wWaterPlants::Enter(StudentsWife* wife)
-{
-
-	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "Time to water the plants!";
-
-}
-
-//The entity waters some plants and then returns to its previous state. 
-void wWaterPlants::Execute(StudentsWife* wife)
-{
-	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "Watering the plants...";
-
-	wife->GetFSM()->RevertToPreviousState();
-
-}
-
-//The entity exits the state Work and announces how they're glad it is over.
-void wWaterPlants::Exit(StudentsWife* wife)
-{
-	std::cout << "\n" << GetNameOfEntity(wife->ID()) << ": " << "The plants are looking healthy!";
->>>>>>> 5b25a19e9fc4ea4677fc543e5700084e73fe6282
 }
